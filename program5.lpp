@@ -1,0 +1,166 @@
+%{
+#include<iostream>
+#include<iomanip>
+#include<string>
+#include"program5.hpp"
+#include"program5.tab.h"
+
+using std::string;
+using std::endl;
+using std::cerr;
+using std::cout;
+
+void yyerror(const char *string)
+{
+  cerr << string << endl;
+  return;
+}
+%}
+
+%option c++
+%option noyywrap
+%option outfile="program5_lex.cpp"
+%option yylineno
+
+%%
+"["         {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return LEFTBRACKET;
+            }
+"]"         {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return RIGHTBRACKET;
+            }
+[\{]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return LEFTCURLYBRACE;
+            }
+[\}]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return RIGHTCURLYBRACE;
+            }
+"!="        { return NOTEQUAL; }
+"=="        { return EQUIVALENT; }
+[<]         {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return LESSTHAN;
+            }
+[>]         { return GREATERTHAN; }
+"<="        { return LESSTHANEQUAL; }
+">="        { return GREATERTHANEQUAL; }
+"&&"        { return AND; }
+"||"        { return OR; }
+[\!]        { return NOT; }
+[\+]        { return PLUS; }
+[\-]        { return MINUS; }
+[\*]        { return TIMES; }
+[\/]        { return DIVIDE; }
+[\%]        { return MODULO; }
+[\;]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return SEMICOLON;
+            }
+[\,]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return COMMA;
+            }
+[\.]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return PERIOD;
+            }
+[\(]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return LEFTPARENTH;
+            }
+[\)]        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return RIGHTPARENTH;
+            }
+[\=]        { return EQUALS; }
+"//"        { return DIVIDE; }
+[" "]*
+\/\*.*\*\/
+\/\/.*\n
+
+"int"       {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return INT;
+            }
+"void"      {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return VOID;
+            }
+"class"     {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return CLASS;
+            }
+"new"       {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return NEW;
+            }
+"print"     {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return PRINT;
+            }
+"read"      {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return READ;
+            }
+"return"    {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return RETURN;
+            }
+"while"     {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return WHILE;
+            }
+"if"        {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return IF;
+            }
+"else"      {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return ELSE;
+            }
+"this"      {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return THIS;
+            }
+"null"      { yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return NULLVAL; }
+
+[a-zA-Z_]([a-zA-Z_]|[0-9])* {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(yytext);
+                return IDENTIFIER;
+            }
+[0-9]+      {
+                yylval.ttype=new Node;
+                yylval.ttype->setVal(atoi(yytext));
+                return NUM;
+            }
+[ \t]+
+[\n]+
+.
